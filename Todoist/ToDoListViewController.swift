@@ -11,28 +11,40 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     var itemArray = ["Purchase iPhone XS", "Figure out Core Data", "Watch Google's Event"]
+    let userDefaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let items = userDefaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     //MARK: - Add Button Tapped
     @IBAction func addButtonTapped(_ sender: Any) {
+                    print(itemArray)
         var textField = UITextField()
+        
         let alert = UIAlertController(title: "Add To-do", message: "", preferredStyle: .alert)
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Enter your to-do"
             textField = alertTextField
         }
-        alert.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(.init(title: "Add", style: .default, handler: { (action) in
+        
+        let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let userInput = textField.text {
-            guard userInput != "" else { return }
+                guard userInput != "" else { return }
                 self.itemArray.append(userInput)
+                self.userDefaults.set(self.itemArray, forKey: "TodoListArray")
             }
             self.tableView.reloadData()
             print(self.itemArray)
-        }))
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(addAction)
+        alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
     }
     
