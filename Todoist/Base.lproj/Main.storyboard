@@ -31,7 +31,13 @@
                             <outlet property="delegate" destination="EVu-zf-ofZ" id="Jaq-8J-rtg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Todoist" id="QKD-1j-4pD"/>
+                    <navigationItem key="navigationItem" title="Todoist" id="QKD-1j-4pD">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="IRL-xZ-YKB">
+                            <connections>
+                                <action selector="addButtonTapped:" destination="EVu-zf-ofZ" id="g7A-1z-n2K"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b89-Xf-wJo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
