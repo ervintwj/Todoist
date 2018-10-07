@@ -7,16 +7,18 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoListViewController: UITableViewController {
     
     var itemArray = [ToDoItem]()
-    let userDefaults = UserDefaults.standard
-    let propertyListDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("ToDoList.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadArrayFromPropertyList()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
+        self.loadArrayFromContext()
+        
     }
     
     //MARK: - Add Button Tapped
@@ -33,17 +35,17 @@ class ToDoListViewController: UITableViewController {
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let userInput = textField.text {
                 guard userInput != "" else { return }
-                let newToDo = ToDoItem(title: userInput, isChecked: false)
+                let newToDo = ToDoItem(context: self.context)
+                newToDo.title = userInput
+                newToDo.isChecked = false
                 self.itemArray.append(newToDo)
-                self.saveArrayToPropertyList()
+                self.saveArrayToContext()
                 
                 self.tableView.reloadData()
                 print(self.itemArray)
             }
         }
 
-        
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alert.addAction(addAction)
@@ -51,27 +53,24 @@ class ToDoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func saveArrayToPropertyList() {
-        let encoder = PropertyListEncoder()
+    func saveArrayToContext() {
         do {
-            let encodedToDo = try encoder.encode(self.itemArray)
-            try encodedToDo.write(to: self.propertyListDirectory!)
+            try context.save()
         } catch {
-            print("Error encoding To-do into Property List, \(error)")
+            print("Error saving to-do to context: \(error)")
         }
     }
     
-    func loadArrayFromPropertyList() {
-        let decoder = PropertyListDecoder()
-        if let data = try? Data(contentsOf: self.propertyListDirectory!) {
-            do {
-                let decodedToDo = try decoder.decode([ToDoItem].self, from: data)
-                self.itemArray = decodedToDo
-            } catch {
-                print("Error decoding To-Do from Property List, \(error)")
-            }
+    func loadArrayFromContext() {
+        let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+        do {
+        itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching to-do from context: \(error)")
         }
     }
+    
+
 }
 
 
@@ -98,11 +97,10 @@ extension ToDoListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         itemArray[indexPath.row].isChecked = !itemArray[indexPath.row].isChecked
-        saveArrayToPropertyList()
+        saveArrayToContext()
     
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
     }
-    
 }
 
