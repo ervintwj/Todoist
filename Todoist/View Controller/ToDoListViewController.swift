@@ -56,6 +56,7 @@ class ToDoListViewController: UITableViewController {
     func saveArrayToContext() {
         do {
             try context.save()
+            print(context.description)
         } catch {
             print("Error saving to-do to context: \(error)")
         }
@@ -69,10 +70,7 @@ class ToDoListViewController: UITableViewController {
             print("Error fetching to-do from context: \(error)")
         }
     }
-    
-
 }
-
 
 extension ToDoListViewController {
 
@@ -97,10 +95,15 @@ extension ToDoListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         itemArray[indexPath.row].isChecked = !itemArray[indexPath.row].isChecked
+        
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
+
         saveArrayToContext()
     
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
     }
+    
 }
 
