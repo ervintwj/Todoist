@@ -9,18 +9,17 @@
 import UIKit
 import CoreData
 
+//MARK: - Table View Controller
 class ToDoListViewController: UITableViewController {
     
+    //MARK: - Global Variables + ViewDidLoad Method
     var itemArray = [ToDoItem]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
     var alertTextField = UITextField()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
         self.loadArrayFromContext()
-        
     }
     
     //MARK: - User Interactions Methods
@@ -37,7 +36,6 @@ class ToDoListViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell")!
         
         let item = itemArray[indexPath.row]
-        
         cell.textLabel?.text = item.title
         cell.accessoryType = item.isChecked ? .checkmark : .none
         
@@ -45,7 +43,7 @@ class ToDoListViewController: UITableViewController {
     }
     
     
-    //MARK: - TableView Delegate Interactions
+    //MARK: TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         itemArray[indexPath.row].isChecked = !itemArray[indexPath.row].isChecked
@@ -64,7 +62,6 @@ class ToDoListViewController: UITableViewController {
     func saveArrayToContext() {
         do {
             try context.save()
-            print(context.description)
         } catch {
             print("Error saving to-do to context: \(error)")
         }
@@ -72,15 +69,26 @@ class ToDoListViewController: UITableViewController {
     
     func loadArrayFromContext() {
         let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+        fetchArrayWithRequest(named: request)
+        
+    }
+    
+    //MARK:  Helper Methods for Table View
+    func fetchArrayWithRequest(named request: NSFetchRequest<ToDoItem>) {
         do {
             itemArray = try context.fetch(request)
         } catch {
-            print("Error fetching to-do from context: \(error)")
+            print("Error fetching to-do with request: \(error)")
+        }
+        tableView.reloadData()
+    }
+    
+    func hideKeyboard(_ object: UIView) {
+        DispatchQueue.main.async {
+            object.resignFirstResponder()
         }
     }
     
-    
-    //MARK: - Helper Methods
     func presentAlert(_ textfield: UITextField) {
         let alert = UIAlertController(title: "Add To-do", message: "", preferredStyle: .alert)
         alert.addTextField { (alertTextField) in
@@ -107,6 +115,44 @@ class ToDoListViewController: UITableViewController {
         alert.addAction(addAction)
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+}
+
+//MARK: - SearchBar Delegate
+extension ToDoListViewController: UISearchBarDelegate {
+    
+    //MARK: - SearchBar Delegate Methods
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        if searchBar.text?.count == 0 {
+            hideKeyboard(searchBar)
+            loadArrayFromContext()
+        } else {
+            let request = getSearchRequest(from: searchBar)
+            hideKeyboard(searchBar)
+            fetchArrayWithRequest(named: request)
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchBar.text?.count == 0 {
+            loadArrayFromContext()
+        } else {
+            let request = getSearchRequest(from: searchBar)
+            fetchArrayWithRequest(named: request)
+        }
+    }
+    
+    //MARK: - Helper Methods for Search Bar
+    func getSearchRequest(from searchBar: UISearchBar) -> NSFetchRequest<ToDoItem> {
+        let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+        if let userInput = searchBar.text {
+            request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", userInput)
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        }
+        return request
     }
     
 }
