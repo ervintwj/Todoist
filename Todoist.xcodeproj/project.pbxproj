@@ -13,6 +13,7 @@
 		A619E87221651E2D00CF4546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A619E87121651E2D00CF4546 /* Assets.xcassets */; };
 		A619E87521651E2D00CF4546 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A619E87321651E2D00CF4546 /* LaunchScreen.storyboard */; };
 		A62CCAE3216A692D005509FC /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A62CCAE1216A692D005509FC /* DataModel.xcdatamodeld */; };
+		A6916235216D052500A3FEAE /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6916234216D052500A3FEAE /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A619E87421651E2D00CF4546 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A619E87621651E2D00CF4546 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A62CCAE2216A692D005509FC /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		A6916234216D052500A3FEAE /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 		A62CCAE0216A68DE005509FC /* View Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A6916234216D052500A3FEAE /* CategoryViewController.swift */,
 				A619E86C21651E2B00CF4546 /* ToDoListViewController.swift */,
 			);
 			path = "View Controller";
@@ -162,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6916235216D052500A3FEAE /* CategoryViewController.swift in Sources */,
 				A619E86D21651E2B00CF4546 /* ToDoListViewController.swift in Sources */,
 				A62CCAE3216A692D005509FC /* DataModel.xcdatamodeld in Sources */,
 				A619E86B21651E2B00CF4546 /* AppDelegate.swift in Sources */,

@@ -9,17 +9,22 @@
 import UIKit
 import CoreData
 
-//MARK: - Table View Controller
 class ToDoListViewController: UITableViewController {
     
-    //MARK: - Global Variables + ViewDidLoad Method
+    //MARK: - Global Variables + Lifecycle Method
     var itemArray = [ToDoItem]()
+    var selectedCategory: Category? {
+        didSet {
+            let categoryRequest = getCategoryRequest()
+            loadArrayWithRequest(named: categoryRequest)
+        }
+    }
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var alertTextField = UITextField()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadArrayFromContext()
     }
     
     //MARK: - User Interactions Methods
@@ -43,14 +48,10 @@ class ToDoListViewController: UITableViewController {
     }
     
     
-    //MARK: TableView Delegate Methods
+    //MARK: TableView Delegate 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         itemArray[indexPath.row].isChecked = !itemArray[indexPath.row].isChecked
-        
-        //        COREDATA: DESTROY FROM CONTEXT
-        //        context.delete(itemArray[indexPath.row])
-        //        itemArray.remove(at: indexPath.row)
         
         saveArrayToContext()
         
@@ -58,7 +59,7 @@ class ToDoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    //MARK: - Core Data – Saving and Loading
+    //MARK: - CoreData Methods
     func saveArrayToContext() {
         do {
             try context.save()
@@ -66,23 +67,42 @@ class ToDoListViewController: UITableViewController {
             print("Error saving to-do to context: \(error)")
         }
     }
-    
-    func loadArrayFromContext() {
-        let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
-        fetchArrayWithRequest(named: request)
-        
-    }
-    
-    //MARK:  Helper Methods for Table View
-    func fetchArrayWithRequest(named request: NSFetchRequest<ToDoItem>) {
-        do {
-            itemArray = try context.fetch(request)
-        } catch {
-            print("Error fetching to-do with request: \(error)")
+
+    func loadArrayWithRequest(named request: NSFetchRequest<ToDoItem>?) {
+        if let request = request {
+            do {
+                itemArray = try context.fetch(request)
+            } catch {
+                print("Error fetching to-do with request: \(error)")
+            }
+        } else {
+            let defaultRequest: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+            itemArray = try! context.fetch(defaultRequest)
         }
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
     
+    func getSearchRequest(from searchBar: UISearchBar) -> NSFetchRequest<ToDoItem> {
+        let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+        if let userInput = searchBar.text {
+            
+            request.predicate = NSCompoundPredicate(type: .and, subpredicates: [
+                NSPredicate(format: "title CONTAINS[cd] %@", userInput),
+                NSPredicate(format: "parentCategory.name MATCHES[cd] %@", selectedCategory!.name!)])
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        }
+        return request
+    }
+    
+    func getCategoryRequest() -> NSFetchRequest<ToDoItem> {
+        let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+        if let selectedCategory = selectedCategory {
+            request.predicate = NSPredicate(format: "parentCategory.name MATCHES[cd] %@", selectedCategory.name!)
+        }
+        return request
+    }
+    
+    //MARK: - Helper Methods for Table View
     func hideKeyboard(_ object: UIView) {
         DispatchQueue.main.async {
             object.resignFirstResponder()
@@ -102,6 +122,7 @@ class ToDoListViewController: UITableViewController {
                 let newToDo = ToDoItem(context: self.context)
                 newToDo.title = userInput
                 newToDo.isChecked = false
+                newToDo.parentCategory = self.selectedCategory
                 self.itemArray.append(newToDo)
                 self.saveArrayToContext()
                 
@@ -119,7 +140,7 @@ class ToDoListViewController: UITableViewController {
     
 }
 
-//MARK: - SearchBar Delegate
+//MARK: -
 extension ToDoListViewController: UISearchBarDelegate {
     
     //MARK: - SearchBar Delegate Methods
@@ -127,33 +148,24 @@ extension ToDoListViewController: UISearchBarDelegate {
         
         if searchBar.text?.count == 0 {
             hideKeyboard(searchBar)
-            loadArrayFromContext()
+            let request = getCategoryRequest()
+            loadArrayWithRequest(named: request)
         } else {
-            let request = getSearchRequest(from: searchBar)
             hideKeyboard(searchBar)
-            fetchArrayWithRequest(named: request)
+            let request = getSearchRequest(from: searchBar)
+            loadArrayWithRequest(named: request)
         }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchBar.text?.count == 0 {
-            loadArrayFromContext()
+            let request = getCategoryRequest()
+            loadArrayWithRequest(named: request)
         } else {
             let request = getSearchRequest(from: searchBar)
-            fetchArrayWithRequest(named: request)
+            loadArrayWithRequest(named: request)
         }
     }
-    
-    //MARK: - Helper Methods for Search Bar
-    func getSearchRequest(from searchBar: UISearchBar) -> NSFetchRequest<ToDoItem> {
-        let request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
-        if let userInput = searchBar.text {
-            request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", userInput)
-            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        }
-        return request
-    }
-    
 }
 
