@@ -12,11 +12,15 @@
 		A619E87021651E2B00CF4546 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A619E86E21651E2B00CF4546 /* Main.storyboard */; };
 		A619E87221651E2D00CF4546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A619E87121651E2D00CF4546 /* Assets.xcassets */; };
 		A619E87521651E2D00CF4546 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A619E87321651E2D00CF4546 /* LaunchScreen.storyboard */; };
-		A62CCAE3216A692D005509FC /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A62CCAE1216A692D005509FC /* DataModel.xcdatamodeld */; };
+		A66D684F216FB73C0096A58A /* ToDoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66D684E216FB73C0096A58A /* ToDoItem.swift */; };
+		A66D6851216FB7490096A58A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66D6850216FB7490096A58A /* Category.swift */; };
 		A6916235216D052500A3FEAE /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6916234216D052500A3FEAE /* CategoryViewController.swift */; };
+		EBA0406D09E19A917524A855 /* Pods_Todoist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147E6BBA7063D579B1DE30F3 /* Pods_Todoist.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		147E6BBA7063D579B1DE30F3 /* Pods_Todoist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Todoist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		70774836237886FEDB7437B0 /* Pods-Todoist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoist.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Todoist/Pods-Todoist.debug.xcconfig"; sourceTree = "<group>"; };
 		A619E86721651E2A00CF4546 /* Todoist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A619E86A21651E2B00CF4546 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A619E86C21651E2B00CF4546 /* ToDoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListViewController.swift; sourceTree = "<group>"; };
@@ -24,8 +28,10 @@
 		A619E87121651E2D00CF4546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A619E87421651E2D00CF4546 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A619E87621651E2D00CF4546 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A62CCAE2216A692D005509FC /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		A66D684E216FB73C0096A58A /* ToDoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItem.swift; sourceTree = "<group>"; };
+		A66D6850216FB7490096A58A /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A6916234216D052500A3FEAE /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		ECB139E745AE5933F41FC565 /* Pods-Todoist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoist.release.xcconfig"; path = "Pods/Target Support Files/Pods-Todoist/Pods-Todoist.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +39,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBA0406D09E19A917524A855 /* Pods_Todoist.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		351E9E64D97B839CAE52C07C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				147E6BBA7063D579B1DE30F3 /* Pods_Todoist.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		44BE0AB09201F12D0794E750 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				70774836237886FEDB7437B0 /* Pods-Todoist.debug.xcconfig */,
+				ECB139E745AE5933F41FC565 /* Pods-Todoist.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		A619E85E21651E2A00CF4546 = {
 			isa = PBXGroup;
 			children = (
 				A619E86921651E2B00CF4546 /* Todoist */,
 				A619E86821651E2A00CF4546 /* Products */,
+				44BE0AB09201F12D0794E750 /* Pods */,
+				351E9E64D97B839CAE52C07C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,7 +98,8 @@
 		A62CCADE2167E4E6005509FC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A62CCAE1216A692D005509FC /* DataModel.xcdatamodeld */,
+				A66D684E216FB73C0096A58A /* ToDoItem.swift */,
+				A66D6850216FB7490096A58A /* Category.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -101,9 +128,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A619E87921651E2D00CF4546 /* Build configuration list for PBXNativeTarget "Todoist" */;
 			buildPhases = (
+				6D2835AC64421ADFE4F236DC /* [CP] Check Pods Manifest.lock */,
 				A619E86321651E2A00CF4546 /* Sources */,
 				A619E86421651E2A00CF4546 /* Frameworks */,
 				A619E86521651E2A00CF4546 /* Resources */,
+				D1CB812307AA9ABE5C02925C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -160,6 +189,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6D2835AC64421ADFE4F236DC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Todoist-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D1CB812307AA9ABE5C02925C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Todoist/Pods-Todoist-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Todoist/Pods-Todoist-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A619E86321651E2A00CF4546 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -167,8 +237,9 @@
 			files = (
 				A6916235216D052500A3FEAE /* CategoryViewController.swift in Sources */,
 				A619E86D21651E2B00CF4546 /* ToDoListViewController.swift in Sources */,
-				A62CCAE3216A692D005509FC /* DataModel.xcdatamodeld in Sources */,
+				A66D684F216FB73C0096A58A /* ToDoItem.swift in Sources */,
 				A619E86B21651E2B00CF4546 /* AppDelegate.swift in Sources */,
+				A66D6851216FB7490096A58A /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +383,7 @@
 		};
 		A619E87A21651E2D00CF4546 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 70774836237886FEDB7437B0 /* Pods-Todoist.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -330,6 +402,7 @@
 		};
 		A619E87B21651E2D00CF4546 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ECB139E745AE5933F41FC565 /* Pods-Todoist.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -368,19 +441,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		A62CCAE1216A692D005509FC /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A62CCAE2216A692D005509FC /* DataModel.xcdatamodel */,
-			);
-			currentVersion = A62CCAE2216A692D005509FC /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = A619E85F21651E2A00CF4546 /* Project object */;
 }

@@ -2,18 +2,17 @@
 //  ToDoItem.swift
 //  Todoist
 //
-//  Created by Ervin on 6/10/18.
+//  Created by Ervin on 12/10/18.
 //  Copyright © 2018 Ervin. All rights reserved.
 //
 
 import Foundation
+import RealmSwift
 
-struct ToDoItem: Codable {
-    var title: String
-    var isChecked: Bool
+class ToDoItem: Object {
     
-    init(title: String, isChecked: Bool) {
-        self.title = title
-        self.isChecked = isChecked
-    }
+    @objc dynamic var title = String()
+    @objc dynamic var isChecked = Bool()
+    var parentCategory = LinkingObjects(fromType: Category.self, property: "items")
+    
 }
