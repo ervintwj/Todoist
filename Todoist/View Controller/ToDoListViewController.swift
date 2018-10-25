@@ -47,6 +47,22 @@ class ToDoListViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+            
+            do {
+                try self.realm.write {
+                    self.realm.delete(self.toDoItemsArray![indexPath.row])
+                }
+            } catch { print("Error deleting to-do item, \(error)") }
+            completionHandler(true)
+        }
+        
+        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        return config
+    }
+    
     
     //MARK: TableView Delegate 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

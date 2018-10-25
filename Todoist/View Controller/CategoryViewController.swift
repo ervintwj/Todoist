@@ -54,6 +54,24 @@ class CategoryViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+            do {
+                try self.realm.write {
+                    let category = self.categoryArray![indexPath.row]
+                    self.realm.delete(category.items)
+                    self.realm.delete(category)
+                }
+            } catch { print("Unable to delete category, \(error)") }
+            completionHandler(true)
+        }
+        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        
+        return config
+    }
+
+    
     // MARK: - Helper Methods
     func presentAlert(_ textfield: UITextField) {
         let alert = UIAlertController(title: "Add New Category", message: "", preferredStyle: .alert)
