@@ -12,13 +12,13 @@ import RealmSwift
 class ToDoListViewController: UITableViewController {
     
     //MARK: - Global Variables + Lifecycle Method
-    var toDoItems: Results<ToDoItem>?
+    var toDoItemsArray: Results<ToDoItem>?
     var selectedCategory: Category? {
         didSet {
             loadToDoItems()
         }
     }
-    
+    var itemArray = [ToDoItem]()
     let realm = try! Realm()
     var alertTextField = UITextField()
     
@@ -28,18 +28,18 @@ class ToDoListViewController: UITableViewController {
     
     //MARK: - User Interactions Methods
     @IBAction func addButtonTapped(_ sender: Any) {
-                presentAlert(alertTextField)
+        presentAlert(alertTextField)
     }
     
     //MARK: - TableView DataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDoItems?.count ?? 0
+        return toDoItemsArray?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell")!
         
-        if let item = toDoItems?[indexPath.row] {
+        if let item = toDoItemsArray?[indexPath.row] {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.isChecked ? .checkmark : .none
         }
@@ -50,31 +50,28 @@ class ToDoListViewController: UITableViewController {
     
     //MARK: TableView Delegate 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //
-        //        toDoItems?[indexPath.row].isChecked = !toDoItems?[indexPath.row].isChecked
-        //
-        //        save(toDoItem: toDoItems?[indexPath.row])
-        //
+        
+        if let item = toDoItemsArray?[indexPath.row] {
+            
+            do {
+                try realm.write {
+                    item.isChecked = !item.isChecked
+                }
+            } catch {
+                print("Error updating isChecked property, \(error)")
+            }
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
     }
     
-    //MARK: - Realm Methods
-    //    func save(toDoItem: ToDoItem) {
-    //        do {
-    //            try realm.write {
-    //                realm.add(toDoItem)
-    //            }
-    //        } catch {
-    //            print("Error saving to-do to Realm: \(error)")
-    //        }
-    //    }
     
     func loadToDoItems() {
-        toDoItems = realm.objects(ToDoItem.self).sorted(byKeyPath: "title", ascending: true)
+        
+        toDoItemsArray = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        
     }
-    
-    
     
     
     //MARK: - Helper Methods for Table View
@@ -102,6 +99,7 @@ class ToDoListViewController: UITableViewController {
                             let newToDo = ToDoItem()
                             newToDo.title = userInput
                             newToDo.isChecked = false
+                            newToDo.dateCreated = Date(timeIntervalSinceNow: 0)
                             currentCategory.items.append(newToDo)
                         }
                     } catch {
@@ -128,28 +126,29 @@ extension ToDoListViewController: UISearchBarDelegate {
     
     //MARK: - SearchBar Delegate Methods
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        //
-        //        if searchBar.text?.count == 0 {
-        //            hideKeyboard(searchBar)
-        //            let request = getCategoryRequest()
-        //            loadArrayWithRequest(named: request)
-        //        } else {
-        //            hideKeyboard(searchBar)
-        //            let request = getSearchRequest(from: searchBar)
-        //            loadArrayWithRequest(named: request)
-        //        }
+        performSearchQuery(with: searchBar)
+        searchBar.resignFirstResponder()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        //        if searchBar.text?.count == 0 {
-        //            let request = getCategoryRequest()
-        //            loadArrayWithRequest(named: request)
-        //        } else {
-        //            let request = getSearchRequest(from: searchBar)
-        //            loadArrayWithRequest(named: request)
-        //        }
-        //    }
+        performSearchQuery(with: searchBar)
+       
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBarSearchButtonClicked(searchBar)
+    }
+    
+    func performSearchQuery(with searchBar: UISearchBar) {
+        if let userInput = searchBar.text {
+            if userInput.count != 0 {
+                loadToDoItems()
+                toDoItemsArray = toDoItemsArray?.filter("title CONTAINS[cd] %@", userInput).sorted(byKeyPath: "dateCreated", ascending: true)
+                tableView.reloadData()
+            } else {
+                loadToDoItems()
+                tableView.reloadData()
+            }
+        }
+    }
 }

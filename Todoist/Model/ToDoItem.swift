@@ -13,6 +13,7 @@ class ToDoItem: Object {
     
     @objc dynamic var title = String()
     @objc dynamic var isChecked = Bool()
+    @objc dynamic var dateCreated = Date()
     var parentCategory = LinkingObjects(fromType: Category.self, property: "items")
     
 }
